@@ -1,60 +1,60 @@
-''' An interactive plot of the ``sin`` function. This example demonstrates
-adding widgets and ``CustomJS`` callbacks that can update a plot.
+## bokeh serve --show graph_data_points.py
 
-.. bokeh-example-metadata::
-    :apis: bokeh.plotting.figure.line, bokeh.layouts.column, bokeh.layouts.row, bokeh.models.CustomJS, bokeh.models.Slider
-    :refs: :ref:`ug_interaction_js_callbacks_customjs`
-    :keywords: javascript callback
-
-'''
 import numpy as np
-
+import neural_network as nn
 from bokeh.layouts import column, row
-from bokeh.models import ColumnDataSource, CustomJS, Slider, Band
+from bokeh.models import ColumnDataSource, HoverTool, Slider
+from bokeh.io import curdoc
 from bokeh.plotting import figure, show
 
+
+
 def graphData(red_x_points, red_y_points,blue_x_points, blue_y_points):
-    x = np.linspace(0, 100, 500)
-    y = np.sin(x)
+    weight_1_1 = Slider(start=-1, end=1, value=-0.8, step=.1, title="Weight 1_1")
+    weight_2_1 = Slider(start=-1, end=1, value=-0.9, step=.1, title="Weight 2_1")
+    weight_1_2 = Slider(start=-1, end=1, value=-0.8, step=.1, title="Weight 1_2")
+    weight_2_2 = Slider(start=-1, end=1, value=-0.7, step=.1, title="Weight 2_2")
 
-    source = ColumnDataSource(data=dict(x=x, y=y))
-
+    bias_1 = Slider(start=0, end=100, value=10, step=1, title="Bias_1")
+    bias_2 = Slider(start=0, end=100, value=0, step=1, title="Bias_2")
+    
     plot = figure(width=800, height=800)
+    redSource = ColumnDataSource()
+    blueSource = ColumnDataSource()
+    def shadeRedBlue(attr, old, new):
+        x_y = nn.ClassifyPoints(weight_1_1.value, weight_2_1.value, weight_1_2.value, weight_2_2.value, bias_1.value, bias_2.value)
+        x = x_y[0]
+        y = x_y[1]
+        bx = x_y[2]
+        by = x_y[3]
+        redSource.data = dict(x=x, y=y)
+        blueSource.data = dict(x=bx, y=by)
+    
+    shadeRedBlue(None, None, None)
+    
 
-    plot.line('x', 'y', source=source, line_width=3, line_alpha=0.6)
+        
 
-    upper = 20
-    band = Band(base='x', lower=0, upper=20, source=source,
-            fill_alpha=0.3, fill_color="gray", line_color="black")
-    plot.add_layout(band)
+    
+    plot.rect(x='x', y='y', source=redSource, width=1, height=1, fill_color='red', fill_alpha = 0.2, line_color=None)
+    plot.rect(x='x', y='y', source=blueSource, width=1, height=1, fill_color='blue', fill_alpha = 0.2, line_color=None)
+
 
 
 
     plot.circle(x=red_x_points, y=red_y_points, size=10, fill_color="#ff5454")
     plot.circle(x=blue_x_points, y=blue_y_points, size=10, fill_color="#545dff")
-
-
-    amp = Slider(start=0.1, end=10, value=1, step=.1, title="Amplitude")
-    freq = Slider(start=0.1, end=10, value=1, step=.1, title="Frequency")
-    phase = Slider(start=-6.4, end=6.4, value=0, step=.1, title="Phase")
-    offset = Slider(start=-9, end=9, value=0, step=.1, title="Offset")
     
+    plot.add_tools(HoverTool(tooltips=[('X','@x'), ('Y', '@y')]))
 
-    callback = CustomJS(args=dict(source=source, amp=amp, freq=freq, phase=phase, offset=offset),
-                        code="""
-        const A = amp.value
-        const k = freq.value
-        const phi = phase.value
-        const B = offset.value
 
-        const x = source.data.x
-        const y = Array.from(x, (x) => B + A*Math.sin(k*x+phi))
-        source.data = { x, y }
-    """)
+    weight_1_1.on_change('value', shadeRedBlue)
+    weight_2_1.on_change('value', shadeRedBlue)
+    weight_1_2.on_change('value', shadeRedBlue)
+    weight_2_2.on_change('value', shadeRedBlue)
+    bias_1.on_change('value', shadeRedBlue)
+    bias_2.on_change('value', shadeRedBlue)
 
-    amp.js_on_change('value', callback)
-    freq.js_on_change('value', callback)
-    phase.js_on_change('value', callback)
-    offset.js_on_change('value', callback)
-
-    show(row(plot, column(amp, freq, phase, offset)))
+    layout = column(plot, weight_1_1, weight_2_1, weight_1_2, weight_2_2, bias_1, bias_2)
+    curdoc().add_root(layout)
+ 

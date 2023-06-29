@@ -1,17 +1,28 @@
-import graphing
-import pandas as pd
 
-df = pd.read_csv('./data/data.csv')
 
-# print(df['x_variable']) 
-red_points = df[df['red'] == 1]
-blue_points = df[df['red'] == 0]
+def Classify(input_1, input_2, weight_1_1, weight_2_1, weight_1_2, weight_2_2, bias_1, bias_2):
+    output_1 = input_1 * weight_1_1 + input_2 * weight_2_1 + bias_1
+    output_2 = input_1 * weight_1_2 + input_2 * weight_2_2 + bias_2
+    
+    return 0 if output_1 > output_2 else 1
 
-red_x_points = red_points['x_variable']
-red_y_points = red_points['y_variable']
-blue_x_points = blue_points['x_variable']
-blue_y_points = blue_points['y_variable']
 
-graphing.graphData(red_x_points=red_x_points, red_y_points=red_y_points,
-                   blue_x_points=blue_x_points, blue_y_points=blue_y_points
-                   )
+def ClassifyPoints(weight_1_1, weight_2_1, weight_1_2, weight_2_2, bias_1, bias_2):
+    
+    red_x_values = []
+    red_y_values = []
+    blue_x_values = []
+    blue_y_values = []
+    
+    for x in range(100):
+        for y in range(100):
+            if Classify(x, y, weight_1_1, weight_2_1, weight_1_2, weight_2_2, bias_1, bias_2) == 1:
+                red_x_values.append(x)
+                red_y_values.append(y)
+                
+            else:
+                blue_x_values.append(x)
+                blue_y_values.append(y)
+               
+ 
+    return [red_x_values, red_y_values, blue_x_values, blue_y_values]
