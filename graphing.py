@@ -1,7 +1,7 @@
 ## bokeh serve --show graph_data_points.py
 
 import numpy as np
-import neural_network as nn
+import Classifier as nn
 from bokeh.layouts import column, row
 from bokeh.models import ColumnDataSource, HoverTool, Slider
 from bokeh.io import curdoc

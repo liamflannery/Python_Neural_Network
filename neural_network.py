@@ -1,28 +1,54 @@
+import Layer as LayerClass
+
+Layer = LayerClass.Layer
 
 
-def Classify(input_1, input_2, weight_1_1, weight_2_1, weight_1_2, weight_2_2, bias_1, bias_2):
-    output_1 = input_1 * weight_1_1 + input_2 * weight_2_1 + bias_1
-    output_2 = input_1 * weight_1_2 + input_2 * weight_2_2 + bias_2
+hiddenLayerWeights = dict()
+hiddenLayerWeights[0] = [1,0]
+hiddenLayerWeights[1] = [0,0]
+hiddenLayerWeights[2] = [0,0]
+
+outputLayerWeights = dict()
+outputLayerWeights[0] = [1,0,0]
+outputLayerWeights[1] = [0,0,0]
+
+
+inputLayer = Layer([1,1], None, None)
+hiddenLayer = Layer(inputLayer, hiddenLayerWeights, 3)
+outputLayer = Layer(hiddenLayer, outputLayerWeights, 2)
+
+outputLayer.toString()
+
+
+
+
+
+# inputLayer = list()
+# inputLayer.append(Node(None, None, 2))
+# inputLayer.append(Node(None, None, 1))
+
+# hiddenLayer = list()
+
+# inputToHiddenWeights = dict()
+
+# for node in inputLayer:
+#     inputToHiddenWeights[node] = 1
     
-    return 0 if output_1 > output_2 else 1
+# hiddenLayer.append(Node(inputLayer, inputToHiddenWeights.copy(), None))
+# hiddenLayer.append(Node(inputLayer, inputToHiddenWeights.copy(), None))
+# hiddenLayer.append(Node(inputLayer, inputToHiddenWeights.copy(), None))
+
+# outputLayer = list()
+# hiddenToOutputWeights = dict()
+
+# for node in hiddenLayer:
+#     hiddenToOutputWeights[node] = 1
+    
+
+# outputLayer.append(Node(hiddenLayer, hiddenToOutputWeights.copy(), None))
+# outputLayer.append(Node(hiddenLayer, hiddenToOutputWeights.copy(), None))
 
 
-def ClassifyPoints(weight_1_1, weight_2_1, weight_1_2, weight_2_2, bias_1, bias_2):
-    
-    red_x_values = []
-    red_y_values = []
-    blue_x_values = []
-    blue_y_values = []
-    
-    for x in range(100):
-        for y in range(100):
-            if Classify(x, y, weight_1_1, weight_2_1, weight_1_2, weight_2_2, bias_1, bias_2) == 1:
-                red_x_values.append(x)
-                red_y_values.append(y)
-                
-            else:
-                blue_x_values.append(x)
-                blue_y_values.append(y)
-               
- 
-    return [red_x_values, red_y_values, blue_x_values, blue_y_values]
+# for node in outputLayer:
+#     print(node.outputValue)
+
