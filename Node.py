@@ -1,8 +1,8 @@
 class Node: #inputNodes(Node, nodeOutputValue) # inputWeights(Node, weightValue)
     
     
-    def __init__(self, inputNodes, inputWeights, input):
-        if(input):
+    def __init__(self, inputNodes, inputWeights, input, isInput):
+        if(isInput):
             self.outputValue = input
         
         else:

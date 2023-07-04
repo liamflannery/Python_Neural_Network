@@ -2,22 +2,31 @@ import Layer as LayerClass
 
 Layer = LayerClass.Layer
 
+def Network(
+    i1, i2,
+    hw11, hw12, hw13,
+    hw21, hw22, hw23,
+    ow11, ow12,
+    ow21, ow22,
+    ow31, ow32
+):
+    
+    hiddenLayerWeights = dict()
+    hiddenLayerWeights[0] = [hw11,hw21]
+    hiddenLayerWeights[1] = [hw12,hw22]
+    hiddenLayerWeights[2] = [hw13,hw23]
 
-hiddenLayerWeights = dict()
-hiddenLayerWeights[0] = [1,0]
-hiddenLayerWeights[1] = [0,0]
-hiddenLayerWeights[2] = [0,0]
-
-outputLayerWeights = dict()
-outputLayerWeights[0] = [1,0,0]
-outputLayerWeights[1] = [0,0,0]
+    outputLayerWeights = dict()
+    outputLayerWeights[0] = [ow11,ow21,ow31]
+    outputLayerWeights[1] = [ow12,ow22,ow32]
 
 
-inputLayer = Layer([1,1], None, None)
-hiddenLayer = Layer(inputLayer, hiddenLayerWeights, 3)
-outputLayer = Layer(hiddenLayer, outputLayerWeights, 2)
+    inputLayer = Layer([i1,i2], None, None)
+    hiddenLayer = Layer(inputLayer, hiddenLayerWeights, 3)
+    outputLayer = Layer(hiddenLayer, outputLayerWeights, 2)
 
-outputLayer.toString()
+    return outputLayer.getValues
+
 
 
 

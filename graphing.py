@@ -10,28 +10,57 @@ from bokeh.plotting import figure, show
 
 
 def graphData(red_x_points, red_y_points,blue_x_points, blue_y_points):
-    weight_1_1 = Slider(start=-1, end=1, value=-0.8, step=.1, title="Weight 1_1")
-    weight_2_1 = Slider(start=-1, end=1, value=-0.9, step=.1, title="Weight 2_1")
-    weight_1_2 = Slider(start=-1, end=1, value=-0.8, step=.1, title="Weight 1_2")
-    weight_2_2 = Slider(start=-1, end=1, value=-0.7, step=.1, title="Weight 2_2")
-
-    bias_1 = Slider(start=0, end=100, value=10, step=1, title="Bias_1")
-    bias_2 = Slider(start=0, end=100, value=0, step=1, title="Bias_2")
     
-    plot = figure(width=800, height=800)
-    redSource = ColumnDataSource()
-    blueSource = ColumnDataSource()
+
+    
+    
+    hw11 =  Slider(start=-1, end=1, value=0, step=.1, title="Weight")
+    hw12 =  Slider(start=-1, end=1, value=0, step=.1, title="Weight")
+    hw13 =  Slider(start=-1, end=1, value=0, step=.1, title="Weight")
+    hw21 =  Slider(start=-1, end=1, value=0, step=.1, title="Weight")
+    hw22 =  Slider(start=-1, end=1, value=0, step=.1, title="Weight")
+    hw23 =  Slider(start=-1, end=1, value=0, step=.1, title="Weight")
+    ow11 =  Slider(start=-1, end=1, value=0, step=.1, title="Weight")
+    ow12 =  Slider(start=-1, end=1, value=0, step=.1, title="Weight")
+    ow21 =  Slider(start=-1, end=1, value=0, step=.1, title="Weight")
+    ow22 =  Slider(start=-1, end=1, value=0, step=.1, title="Weight")
+    ow31 =  Slider(start=-1, end=1, value=0, step=.1, title="Weight")
+    ow32  = Slider(start=-1, end=1, value=0, step=.1, title="Weight")
+
+    # bias_1 = Slider(start=0, end=100, value=10, step=1, title="Bias_1")
+    # bias_2 = Slider(start=0, end=100, value=0, step=1, title="Bias_2")
     def shadeRedBlue(attr, old, new):
-        x_y = nn.ClassifyPoints(weight_1_1.value, weight_2_1.value, weight_1_2.value, weight_2_2.value, bias_1.value, bias_2.value)
+        x_y = nn.ClassifyPoints(hw11.value, hw12.value, hw13.value,
+                                hw21.value, hw22.value, hw23.value,
+                                ow11.value, ow12.value,
+                                ow21.value, ow22.value,
+                                ow31.value, ow32.value)
         x = x_y[0]
         y = x_y[1]
         bx = x_y[2]
         by = x_y[3]
         redSource.data = dict(x=x, y=y)
         blueSource.data = dict(x=bx, y=by)
+        
+    plot = figure(width=800, height=800)
+    redSource = ColumnDataSource()
+    blueSource = ColumnDataSource()
     
-    shadeRedBlue(None, None, None)
     
+   
+    
+    hw12.on_change('value', shadeRedBlue)
+    hw11.on_change('value', shadeRedBlue)
+    hw13.on_change('value', shadeRedBlue)
+    hw21.on_change('value', shadeRedBlue)
+    hw22.on_change('value', shadeRedBlue)
+    hw23.on_change('value', shadeRedBlue)
+    ow11.on_change('value', shadeRedBlue)
+    ow12.on_change('value', shadeRedBlue)
+    ow21.on_change('value', shadeRedBlue)
+    ow22.on_change('value', shadeRedBlue)
+    ow31.on_change('value', shadeRedBlue)
+    ow32.on_change('value', shadeRedBlue)
 
         
 
@@ -48,13 +77,10 @@ def graphData(red_x_points, red_y_points,blue_x_points, blue_y_points):
     plot.add_tools(HoverTool(tooltips=[('X','@x'), ('Y', '@y')]))
 
 
-    weight_1_1.on_change('value', shadeRedBlue)
-    weight_2_1.on_change('value', shadeRedBlue)
-    weight_1_2.on_change('value', shadeRedBlue)
-    weight_2_2.on_change('value', shadeRedBlue)
-    bias_1.on_change('value', shadeRedBlue)
-    bias_2.on_change('value', shadeRedBlue)
-
-    layout = column(plot, weight_1_1, weight_2_1, weight_1_2, weight_2_2, bias_1, bias_2)
+    layout = column(plot, hw11, hw12, hw13,
+    hw21, hw22, hw23,
+    ow11, ow12,
+    ow21, ow22,
+    ow31, ow32)
     curdoc().add_root(layout)
  

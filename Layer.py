@@ -7,14 +7,16 @@ class Layer:
         self.nodeList = []
         if(layerWeights):
             for x in range(layerSize):
-                self.nodeList.append(Node(inputLayer.getNodes(), layerWeights[x], None))
+                self.nodeList.append(Node(inputLayer.getNodes(), layerWeights[x], None, False))
         else:
             for x in range(len(inputLayer)):
-                self.nodeList.append(Node(None, None, inputLayer[x]))
+                self.nodeList.append(Node(None, None, inputLayer[x], True))
     
     def getNodes(self):
         return self.nodeList
     
-    def toString(self):
+    def getValues(self):
+        nodes = list()
         for node in self.nodeList:
-            print(node.outputValue)
+            nodes.append(node.outputValue)
+        return nodes
