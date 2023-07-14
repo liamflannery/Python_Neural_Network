@@ -1,24 +1,15 @@
 import neural_network as NetworkClass
 Network = NetworkClass.Network
-
+## change classes to lower snake case
 def Classify(    
     i1, i2,
-    hw11, hw12, hw13,
-    hw21, hw22, hw23,
-    ow11, ow12,
-    ow21, ow22,
-    ow31, ow32,
-    b1,b2,b3,b4,b5
+    weights,
+    biases
     ):
 
     output = Network(
             i1, i2,
-            hw11, hw12, hw13,
-            hw21, hw22, hw23,
-            ow11, ow12,
-            ow21, ow22,
-            ow31, ow32,
-            b1,b2,b3,b4,b5
+            weights, biases, None
     )
     output_1 = round(output()[0], 2)
     output_2 = round(output()[1], 2)
@@ -27,42 +18,42 @@ def Classify(
     # print(output_1, output_2)
     return 0 if output_1 > output_2 else 1
 
+def NodeCost(output, expectedOutput):
+    error = output - expectedOutput
+    return error * error
 
-def Cost():
-    return 0
+def Cost(weights, biases, training_red, training_blue):
+    cost = 0
+    for index, row in training_red.iterrows():
+        cost += NodeCost(Classify(row["x_variable"], row["y_variable"], weights, biases), 1)
+    for index, row in training_blue.iterrows():
+        cost += NodeCost(Classify(row["x_variable"], row["y_variable"], weights, biases), 0)
+    return cost
 
 def ClassifyPoints(
-            hw11, hw12, hw13,
-            hw21, hw22, hw23,
-            ow11, ow12,
-            ow21, ow22,
-            ow31, ow32,
-            b1,b2,b3,b4,b5,
-            training_red, training_blue
+            weights,
+            biases,
+            training_red, training_blue, graphResolution
                    ):
     
     red_x_values = []
     red_y_values = []
     blue_x_values = []
     blue_y_values = []
-    cost = Cost(training_red, training_blue)
-    for x in range(0, 100):
-        for y in range(0, 100):
+    cost = Cost(weights=weights, biases=biases, training_red=training_red, training_blue=training_blue)
+    for x in range(0, graphResolution * 100):
+        for y in range(0, graphResolution * 100):
             if Classify(
-                x, y,
-                hw11, hw12, hw13,
-                hw21, hw22, hw23,
-                ow11, ow12,
-                ow21, ow22,
-                ow31, ow32,
-                b1,b2,b3,b4,b5
+                x/graphResolution, y/graphResolution,
+                weights,
+                biases
             ) == 1:
-                red_x_values.append(x)
-                red_y_values.append(y)
+                red_x_values.append(x/graphResolution)
+                red_y_values.append(y/graphResolution)
                 
             else:
-                blue_x_values.append(x)
-                blue_y_values.append(y)
+                blue_x_values.append(x/graphResolution)
+                blue_y_values.append(y/graphResolution)
                
  
     return [red_x_values, red_y_values, blue_x_values, blue_y_values, cost]

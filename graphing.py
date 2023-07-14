@@ -31,16 +31,21 @@ def graphData(red_x_points, red_y_points,blue_x_points, blue_y_points, training_
     b3 = Slider(start=-100, end=100, value=23, step=1, title="Bias 3")
     b4 = Slider(start=-100, end=100, value=0, step=1, title="Bias 4")
     b5 = Slider(start=-100, end=100, value=0, step=1, title="Bias 5")
+    
+    graphResolution = 1
     # bias_1 = Slider(start=0, end=100, value=10, step=1, title="Bias_1")
     # bias_2 = Slider(start=0, end=100, value=0, step=1, title="Bias_2")
     def shadeRedBlue(attr, old, new):
-        x_y = nn.ClassifyPoints(hw11.value, hw12.value, hw13.value,
-                                hw21.value, hw22.value, hw23.value,
-                                ow11.value, ow12.value,
-                                ow21.value, ow22.value,
-                                ow31.value, ow32.value,
-                                b1.value, b2.value, b3.value, b4.value, b5.value,
-                                training_red, training_blue)
+        weights = [ hw11.value, hw12.value, hw13.value,
+                    hw21.value, hw22.value, hw23.value,
+                    ow11.value, ow12.value,
+                    ow21.value, ow22.value,
+                    ow31.value, ow32.value]
+        biases = [
+            b1.value, b2.value, b3.value, b4.value, b5.value
+        ]
+        x_y = nn.ClassifyPoints(weights,biases,
+                                training_red, training_blue, graphResolution)
         x = x_y[0]
         y = x_y[1]
         bx = x_y[2]
@@ -76,8 +81,8 @@ def graphData(red_x_points, red_y_points,blue_x_points, blue_y_points, training_
         
 
     
-    plot.rect(x='x', y='y', source=redSource, width=1, height=1, fill_color='red', fill_alpha = 0.2, line_color=None)
-    plot.rect(x='x', y='y', source=blueSource, width=1, height=1, fill_color='blue', fill_alpha = 0.2, line_color=None)
+    plot.rect(x='x', y='y', source=redSource, width=1/graphResolution, height=1/graphResolution, fill_color='red', fill_alpha = 0.2, line_color=None)
+    plot.rect(x='x', y='y', source=blueSource, width=1/graphResolution, height=1/graphResolution, fill_color='blue', fill_alpha = 0.2, line_color=None)
 
 
 

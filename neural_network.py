@@ -4,24 +4,21 @@ Layer = LayerClass.Layer
 
 def Network(
     i1, i2,
-    hw11, hw12, hw13,
-    hw21, hw22, hw23,
-    ow11, ow12,
-    ow21, ow22,
-    ow31, ow32,
-    b1,b2,b3,b4,b5
+    weights,
+    biasValues,
+    trainingValues
 ):
     
     hiddenLayerWeights = dict()
-    hiddenLayerWeights[0] = [hw11,hw21]
-    hiddenLayerWeights[1] = [hw12,hw22]
-    hiddenLayerWeights[2] = [hw13,hw23]
+    hiddenLayerWeights[0] = [weights[0], weights[3]]
+    hiddenLayerWeights[1] = [weights[1],weights[4]]
+    hiddenLayerWeights[2] = [weights[3],weights[5]]
 
     outputLayerWeights = dict()
-    outputLayerWeights[0] = [ow11,ow21,ow31]
-    outputLayerWeights[1] = [ow12,ow22,ow32]
+    outputLayerWeights[0] = [weights[6],weights[8],weights[10]]
+    outputLayerWeights[1] = [weights[7],weights[9],weights[11]]
     
-    biasValues = [b1,b2,b3,b4,b5]
+    
 
 
     inputLayer = Layer([i1,i2], None, None, biasValues, 0)
@@ -34,8 +31,8 @@ def Network(
     #     "Hidden Layer: ", hiddenLayer.toString(),"\n"
     #     "Output Layer: ", outputLayer.toString()
     # )
-    
-    return outputLayer.getValues
+    if trainingValues == None:
+        return outputLayer.getValues
 
 
 
