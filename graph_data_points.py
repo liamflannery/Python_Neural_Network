@@ -13,7 +13,8 @@ blue_x_points = blue_points['x_variable']
 blue_y_points = blue_points['y_variable']
 
 graphing.graphData(red_x_points=red_x_points, red_y_points=red_y_points,
-                   blue_x_points=blue_x_points, blue_y_points=blue_y_points 
+                   blue_x_points=blue_x_points, blue_y_points=blue_y_points,
+                   training_red = red_points, training_blue = blue_points
                    )
 
 

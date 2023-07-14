@@ -8,7 +8,8 @@ def Network(
     hw21, hw22, hw23,
     ow11, ow12,
     ow21, ow22,
-    ow31, ow32
+    ow31, ow32,
+    b1,b2,b3,b4,b5
 ):
     
     hiddenLayerWeights = dict()
@@ -19,12 +20,21 @@ def Network(
     outputLayerWeights = dict()
     outputLayerWeights[0] = [ow11,ow21,ow31]
     outputLayerWeights[1] = [ow12,ow22,ow32]
+    
+    biasValues = [b1,b2,b3,b4,b5]
 
 
-    inputLayer = Layer([i1,i2], None, None)
-    hiddenLayer = Layer(inputLayer, hiddenLayerWeights, 3)
-    outputLayer = Layer(hiddenLayer, outputLayerWeights, 2)
+    inputLayer = Layer([i1,i2], None, None, biasValues, 0)
+    hiddenLayer = Layer(inputLayer, hiddenLayerWeights, 3, biasValues[0:3], 1)
+    outputLayer = Layer(hiddenLayer, outputLayerWeights, 2, biasValues[3:5], 2)
 
+    
+    # print(
+    #     "Input Layer:", inputLayer.toString(),"\n"
+    #     "Hidden Layer: ", hiddenLayer.toString(),"\n"
+    #     "Output Layer: ", outputLayer.toString()
+    # )
+    
     return outputLayer.getValues
 
 
