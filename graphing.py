@@ -44,7 +44,7 @@ def graphData(red_x_points, red_y_points,blue_x_points, blue_y_points, training_
         biases = [
             b1.value, b2.value, b3.value, b4.value, b5.value
         ]
-        x_y = nn.ClassifyPoints(weights,biases,
+        x_y = nn.classify_points(weights,biases,
                                 training_red, training_blue, graphResolution)
         x = x_y[0]
         y = x_y[1]

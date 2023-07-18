@@ -1,7 +1,8 @@
+import random
 import neural_network as NetworkClass
 Network = NetworkClass.Network
 ## change classes to lower snake case
-def Classify(    
+def classify(    
     i1, i2,
     weights,
     biases
@@ -18,19 +19,36 @@ def Classify(
     # print(output_1, output_2)
     return 0 if output_1 > output_2 else 1
 
-def NodeCost(output, expectedOutput):
+def node_cost(output, expectedOutput):
     error = output - expectedOutput
     return error * error
 
-def Cost(weights, biases, training_red, training_blue):
+def cost(weights, biases, training_red, training_blue):
     cost = 0
     for index, row in training_red.iterrows():
-        cost += NodeCost(Classify(row["x_variable"], row["y_variable"], weights, biases), 1)
+        cost += node_cost(classify(row["x_variable"], row["y_variable"], weights, biases), 1)
     for index, row in training_blue.iterrows():
-        cost += NodeCost(Classify(row["x_variable"], row["y_variable"], weights, biases), 0)
+        cost += node_cost(classify(row["x_variable"], row["y_variable"], weights, biases), 0)
     return cost
 
-def ClassifyPoints(
+
+
+# def get_random_weight():
+#     return random.randint(-10,10) / 10.0
+
+# def get_random_bias():
+#     return random.randint(-100,100)
+
+# initialWeights = []
+# initialBiases = []
+# for x in range(0,12):
+#     initialWeights.append(get_random_weight())
+# for x in range(0,5):
+#     initialBiases.append(get_random_bias())
+
+
+
+def classify_points(
             weights,
             biases,
             training_red, training_blue, graphResolution
@@ -40,10 +58,10 @@ def ClassifyPoints(
     red_y_values = []
     blue_x_values = []
     blue_y_values = []
-    cost = Cost(weights=weights, biases=biases, training_red=training_red, training_blue=training_blue)
+    costValue = cost(weights=weights, biases=biases, training_red=training_red, training_blue=training_blue)
     for x in range(0, graphResolution * 100):
         for y in range(0, graphResolution * 100):
-            if Classify(
+            if classify(
                 x/graphResolution, y/graphResolution,
                 weights,
                 biases
@@ -55,11 +73,8 @@ def ClassifyPoints(
                 blue_x_values.append(x/graphResolution)
                 blue_y_values.append(y/graphResolution)
                
- 
-    return [red_x_values, red_y_values, blue_x_values, blue_y_values, cost]
-
-
-
+    
+    return [red_x_values, red_y_values, blue_x_values, blue_y_values, costValue]
 
 # for w1 in [z * 0.1 for z in range(-10, 10)]:
 #     for w2 in [z * 0.1 for z in range(-10, 10)]:
