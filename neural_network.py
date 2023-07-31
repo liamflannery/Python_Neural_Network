@@ -1,70 +1,39 @@
-import Layer as LayerClass
+from Layer import InputLayer, HiddenLayer, OutputLayer
 
-Layer = LayerClass.Layer
+InputLayer = InputLayer.InputLayer
+HiddenLayer = HiddenLayer.HiddenLayer
+OutputLayer = OutputLayer.OutputLayer
 
-def Network(
-    i1, i2,
-    weights,
-    biasValues,
-    trainingValues
-):
+class NeuralNetwork:
     
-    hiddenLayerWeights = dict()
-    hiddenLayerWeights[0] = [weights[0], weights[3]]
-    hiddenLayerWeights[1] = [weights[1],weights[4]]
-    hiddenLayerWeights[2] = [weights[3],weights[5]]
+    weights = dict()
+    def __init__(self, input_layer_size, hidden_layer_size, hidden_layer_count, output_layer_size):
+       self.input_layer = InputLayer(input_layer_size)
+       self.hidden_layers = [HiddenLayer(hidden_layer_size) for x in range(0,hidden_layer_count)]
+       self.output_layer = OutputLayer(output_layer_size)
+       
+       self.hidden_layers[0].set_feed_in_layer(self.input_layer)
+       for x in range(1,hidden_layer_count):
+           self.hidden_layers[x].set_feed_in_layer(self.hidden_layers[x-1])
+       self.output_layer.set_feed_in_layer(self.hidden_layers[hidden_layer_count - 1])
 
-    outputLayerWeights = dict()
-    outputLayerWeights[0] = [weights[6],weights[8],weights[10]]
-    outputLayerWeights[1] = [weights[7],weights[9],weights[11]]
+       self.initialise_weights()
     
     
-
-
-    inputLayer = Layer([i1,i2], None, None, biasValues, 0)
-    hiddenLayer = Layer(inputLayer, hiddenLayerWeights, 3, biasValues[0:3], 1)
-    outputLayer = Layer(hiddenLayer, outputLayerWeights, 2, biasValues[3:5], 2)
-
+    def initialise_weights(self):
+        self.weights.update(self.input_layer.initialise_weights())
+        for layer in self.hidden_layers: self.weights.update(layer.initialise_weights())
+        self.weights.update(self.output_layer.initialise_weights())
     
-    # print(
-    #     "Input Layer:", inputLayer.toString(),"\n"
-    #     "Hidden Layer: ", hiddenLayer.toString(),"\n"
-    #     "Output Layer: ", outputLayer.toString()
-    # )
-    if trainingValues == None:
-        return outputLayer.getValues
+    def print_neural_network(self):
+        self.input_layer.print_layer_size()
+        for layer in self.hidden_layers: layer.print_layer_size()
+        self.output_layer.print_layer_size() 
+        print(len(self.weights))
 
 
+   
 
 
-
-
-# inputLayer = list()
-# inputLayer.append(Node(None, None, 2))
-# inputLayer.append(Node(None, None, 1))
-
-# hiddenLayer = list()
-
-# inputToHiddenWeights = dict()
-
-# for node in inputLayer:
-#     inputToHiddenWeights[node] = 1
-    
-# hiddenLayer.append(Node(inputLayer, inputToHiddenWeights.copy(), None))
-# hiddenLayer.append(Node(inputLayer, inputToHiddenWeights.copy(), None))
-# hiddenLayer.append(Node(inputLayer, inputToHiddenWeights.copy(), None))
-
-# outputLayer = list()
-# hiddenToOutputWeights = dict()
-
-# for node in hiddenLayer:
-#     hiddenToOutputWeights[node] = 1
-    
-
-# outputLayer.append(Node(hiddenLayer, hiddenToOutputWeights.copy(), None))
-# outputLayer.append(Node(hiddenLayer, hiddenToOutputWeights.copy(), None))
-
-
-# for node in outputLayer:
-#     print(node.outputValue)
-
+nn = NeuralNetwork(2, 2, 1, 2)
+nn.print_neural_network()
